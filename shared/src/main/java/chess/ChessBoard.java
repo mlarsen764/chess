@@ -23,7 +23,8 @@ public class ChessBoard {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        } else if (obj == null || getClass() != obj.getClass()) {
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
         }
         ChessBoard that = (ChessBoard) obj;
@@ -88,7 +89,7 @@ public class ChessBoard {
         this.addPiece(new ChessPosition(7, 7), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK));
         //black pawns
         for (int i = 0; i < 8; i++) {
-            this.addPiece(new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+            this.addPiece(new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
     }
 }
