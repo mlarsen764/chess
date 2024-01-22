@@ -15,6 +15,10 @@ public class ChessPiece {
     private
         ChessGame.TeamColor pieceColor;
         ChessPiece.PieceType type;
+        ChessBoard board;
+        ChessPosition myPosition;
+        ChessPosition newPosition;
+        Collection<ChessMove> validMoves = new ArrayList<>();
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
         this.pieceColor = pieceColor;
@@ -67,6 +71,26 @@ public class ChessPiece {
      */
     public PieceType getPieceType() {
         return type;
+    }
+
+    public boolean onBoard() {
+        return newPosition.getRow() < 8 && newPosition.getRow() >= 0 && newPosition.getColumn() < 8 && newPosition.getColumn() >= 0;
+    }
+
+    public boolean isValidMove() {
+        return board.getPiece(newPosition) == null || board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor;
+    }
+
+    public void addMove() {
+        validMoves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), null));
+    }
+
+    public void addMove(PieceType promotion) {
+        validMoves.add(new ChessMove(myPosition, new ChessPosition(newPosition.getRow() + 1, newPosition.getColumn() + 1), promotion));
+    }
+
+    public void checkForValidMove(int incRow, int incCol) {
+        //newPosition.update(incRow, incCol);
     }
 
     /**
