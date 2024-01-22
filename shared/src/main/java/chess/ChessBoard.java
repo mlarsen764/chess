@@ -9,7 +9,7 @@ import java.util.Arrays;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private ChessPiece[][] grid = new ChessPiece[9][9];
+    private ChessPiece[][] grid = new ChessPiece[8][8];
     public ChessBoard() {
         
     }
@@ -44,7 +44,7 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        throw new RuntimeException("Not implemented");
+        return grid[position.getRow()][position.getColumn()];
     }
 
     /**
