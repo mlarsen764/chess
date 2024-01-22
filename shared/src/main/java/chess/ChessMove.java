@@ -8,6 +8,11 @@ package chess;
  */
 public class ChessMove {
 
+    @Override
+    public String toString() {
+        return "ChessMove{}";
+    }
+
     public ChessMove(ChessPosition startPosition, ChessPosition endPosition,
                      ChessPiece.PieceType promotionPiece) {
     }
