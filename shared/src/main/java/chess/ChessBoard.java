@@ -9,6 +9,7 @@ import java.util.Arrays;
  * signature of the existing methods.
  */
 public class ChessBoard {
+
     private ChessPiece[][] grid = new ChessPiece[8][8];
     public ChessBoard() {
         
@@ -16,7 +17,7 @@ public class ChessBoard {
 
     @Override
     public String toString() {
-        return "ChessBoard{" + "grid=" + Arrays.deepToString(grid) + "}";
+        return "ChessBoard{" + "grid = " + Arrays.deepToString(grid) + "}";
     }
 
     @Override
