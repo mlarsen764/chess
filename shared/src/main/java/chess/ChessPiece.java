@@ -238,5 +238,75 @@ public class ChessPiece {
                 }
             }
         }
+        //Pawn Moves
+        else if (board.getPiece(myPosition).type == PieceType.PAWN) {
+            if (board.getPiece(myPosition).pieceColor == ChessGame.TeamColor.WHITE) {
+                int incRow = 1;
+                int incCol = -1;
+                for (int i = 0; i < 3; i++) {
+                    newPosition.updatePosition(incRow, incCol);
+                    if (i % 2 == 0 && board.getPiece(newPosition) != null && onBoard() && board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor) {
+                        if (myPosition.getRow() == 6) {
+                            addMove(PieceType.ROOK);
+                            addMove(PieceType.KNIGHT);
+                            addMove(PieceType.BISHOP);
+                            addMove(PieceType.QUEEN);
+                        } else {
+                            addMove();
+                        }
+                    }
+                    else if (i % 2 == 1 && onBoard() && board.getPiece(newPosition) == null) {
+                        if (myPosition.getRow() == 6) {
+                            addMove(PieceType.ROOK);
+                            addMove(PieceType.KNIGHT);
+                            addMove(PieceType.BISHOP);
+                            addMove(PieceType.QUEEN);
+                        } else {
+                            addMove();
+                        }
+                        if(myPosition.getRow() == 1) {
+                            if(onBoard() && board.getPiece(newPosition) == null) {
+                                addMove();
+                            }
+                        }
+                    }
+                    newPosition.resetPosition(myPosition);
+                    incCol++;
+                }
+            } else {
+                int incRow = -1;
+                int incCol = -1;
+                for (int i = 0; i < 3; i++) {
+                    newPosition.updatePosition(incRow, incCol);
+                    if (i % 2 == 0 && board.getPiece(newPosition) != null && onBoard() && board.getPiece(newPosition).pieceColor != board.getPiece(myPosition).pieceColor) {
+                        if (myPosition.getRow() == 1) {
+                            addMove(PieceType.ROOK);
+                            addMove(PieceType.KNIGHT);
+                            addMove(PieceType.BISHOP);
+                            addMove(PieceType.QUEEN);
+                        } else {
+                            addMove();
+                        }
+                    } else if (i % 2 == 1 && board.getPiece(newPosition) == null && onBoard()) {
+                        if (myPosition.getRow() == 1) {
+                            addMove(PieceType.ROOK);
+                            addMove(PieceType.KNIGHT);
+                            addMove(PieceType.BISHOP);
+                            addMove(PieceType.QUEEN);
+                        } else {
+                            addMove();
+                        }
+                        if (myPosition.getRow() == 1) {
+                            if (onBoard() && board.getPiece(newPosition) == null) {
+                                addMove();
+                            }
+                        }
+                    }
+                    newPosition.resetPosition(myPosition);
+                    incCol++;
+                }
+            }
+        }
+        return validMoves;
     }
 }
