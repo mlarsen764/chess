@@ -12,8 +12,30 @@ public class ChessPosition {
     private final int col;
 
     public ChessPosition(int row, int col) {
-        this.row = row;
-        this.col = col;
+        this.row = row - 1;
+        this.col = col - 1;
+    }
+
+    @Override
+    public String toString() {
+        return "ChessPosition{" + "row = " + row + ", col = " + col + "}";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        ChessPosition that = (ChessPosition) obj;
+        return row == that.row && col == that.col;
+    }
+
+    @Override
+    public int hashCode() {
+        
     }
 
     /**
