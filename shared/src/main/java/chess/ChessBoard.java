@@ -63,7 +63,7 @@ public class ChessBoard {
      * (How the game of chess normally starts)
      */
     public void resetBoard() {
-        ChessPiece[][] newBoard = new ChessPiece[9][9];
+        ChessPiece[][] newBoard = new ChessPiece[8][8];
 
         //setup white pieces
         this.addPiece(new ChessPosition(0, 0), new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK));
