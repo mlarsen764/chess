@@ -90,7 +90,17 @@ public class ChessPiece {
     }
 
     public void checkForValidMove(int incRow, int incCol) {
-        //newPosition.update(incRow, incCol);
+        newPosition.updatePosition(incRow, incCol);
+        while (onBoard()) {
+            if (isValidMove()) {
+                addMove();
+            }
+            if (board.getPiece(newPosition) != null) {
+                break;
+            }
+            newPosition.updatePosition(incRow, incCol);
+        }
+        newPosition.resetPosition(myPosition);
     }
 
     /**
@@ -101,6 +111,32 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+        this.board = board;
+        this.myPosition = myPosition;
+        this.newPosition = new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1);
+
+        //Rook Moves
+        if (board.getPiece(myPosition).type == PieceType.ROOK) {
+            int incRow = 1;
+            int incCol = 0;
+            for (int i = 0; i < 4; i++) {
+                checkForValidMove(incRow, incCol);
+                switch (i) {
+                    case 0:
+                        incRow = 0;
+                        incCol = 1;
+                        break;
+                    case 1:
+                        incRow = -1;
+                        incCol = 0;
+                        break;
+                    case 2:
+                        incRow = 0;
+                        incCol = -1;
+                        break;
+                }
+            }
+        }
+
     }
 }
