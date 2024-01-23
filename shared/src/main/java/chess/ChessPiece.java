@@ -137,6 +137,106 @@ public class ChessPiece {
                 }
             }
         }
-
+        //Knight Moves
+        else if (board.getPiece(myPosition).type == PieceType.KNIGHT) {
+            int incRow = 2;
+            int incCol = 1;
+            for (int i = 0; i < 8; i++) {
+                newPosition.updatePosition(incRow, incCol);
+                if (onBoard() && isValidMove()) {
+                    addMove();
+                }
+                newPosition.resetPosition(myPosition);
+                int temp = incRow;
+                incRow = incCol;
+                incCol = temp;
+                if (i % 4 == 0) {
+                    incRow *= -1;
+                }
+                else if (i % 2 == 0) {
+                    incCol *= -1;
+                }
+            }
+        }
+        //Bishop Moves
+        else if (board.getPiece(myPosition).type == PieceType.BISHOP) {
+            int incRow = 1;
+            int incCol = 1;
+            for (int i = 0; i < 4; i++) {
+                checkForValidMove(incRow, incCol);
+                if (i % 2 == 0) {
+                    incRow *= -1;
+                } else {
+                    incCol *= -1;
+                }
+            }
+        }
+        //Queen Moves
+        else if (board.getPiece(myPosition).type == PieceType.QUEEN) {
+            int incRow = 1;
+            int incCol = 0;
+            for (int i = 0; i < 8; i++) {
+                switch (i) {
+                    case 0:
+                        incRow = 0;
+                        incCol = 1;
+                        break;
+                    case 1:
+                        incRow = -1;
+                        incCol = 0;
+                        break;
+                    case 2:
+                        incRow = 0;
+                        incCol = -1;
+                    case 3:
+                        incRow = 1;
+                        incCol = 1;
+                    default:
+                        if (i % 2 == 0) {
+                            incRow *= -1;
+                        } else {
+                            incCol *= -1;
+                        }
+                }
+            }
+        }
+        //King Moves
+        else if (board.getPiece(myPosition).type == PieceType.KING) {
+            int incRow = 1;
+            int incCol = 0;
+            for (int i = 0; i < 8; i++) {
+                newPosition.updatePosition(incRow, incCol);
+                if (onBoard()) {
+                    if(isValidMove()) {
+                        addMove();
+                    }
+                }
+                newPosition.resetPosition(myPosition);
+                switch (i) {
+                    case 0:
+                        incRow = 0;
+                        incCol = 1;
+                        break;
+                    case 1:
+                        incRow = -1;
+                        incCol = 0;
+                        break;
+                    case 2:
+                        incRow = 0;
+                        incCol = -1;
+                        break;
+                    case 3:
+                        incRow = 1;
+                        incCol = 1;
+                        break;
+                    default:
+                        if (i % 2 == 0) {
+                            incRow *= -1;
+                        } else {
+                            incCol *= -1;
+                        }
+                }
+            }
+        }
     }
 }
