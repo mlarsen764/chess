@@ -153,7 +153,7 @@ public class ChessPiece {
                 if (i % 4 == 0) {
                     incRow *= -1;
                 }
-                else if (i % 2 == 0) {
+                else if (i % 4 == 2) {
                     incCol *= -1;
                 }
             }
@@ -188,9 +188,11 @@ public class ChessPiece {
                     case 2:
                         incRow = 0;
                         incCol = -1;
+                        break;
                     case 3:
                         incRow = 1;
                         incCol = 1;
+                        break;
                     default:
                         if (i % 2 == 0) {
                             incRow *= -1;
@@ -265,6 +267,7 @@ public class ChessPiece {
                             addMove();
                         }
                         if(myPosition.getRow() == 1) {
+                            newPosition.updatePosition(incRow, incCol);
                             if(onBoard() && board.getPiece(newPosition) == null) {
                                 addMove();
                             }
@@ -296,7 +299,8 @@ public class ChessPiece {
                         } else {
                             addMove();
                         }
-                        if (myPosition.getRow() == 1) {
+                        if (myPosition.getRow() == 6) {
+                            newPosition.updatePosition(incRow, incCol);
                             if (onBoard() && board.getPiece(newPosition) == null) {
                                 addMove();
                             }
