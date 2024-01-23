@@ -92,5 +92,11 @@ public class ChessBoard {
         for (int i = 0; i < 8; i++) {
             this.addPiece(new ChessPosition(6, i), new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN));
         }
+        //setup empty positions
+        for (int i = 2; i < 6; i++) {
+            for (int j = 0; j < 8; j++) {
+                grid[i][j] = null;
+            }
+        }
     }
 }

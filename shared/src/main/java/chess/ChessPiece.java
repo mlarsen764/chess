@@ -176,6 +176,7 @@ public class ChessPiece {
             int incRow = 1;
             int incCol = 0;
             for (int i = 0; i < 8; i++) {
+                checkForValidMove(incRow, incCol);
                 switch (i) {
                     case 0:
                         incRow = 0;
