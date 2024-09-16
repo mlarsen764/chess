@@ -54,4 +54,8 @@ public class ChessPosition {
     public void setColumn(int col) {
         this.col = col;
     }
+
+    public boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
 }

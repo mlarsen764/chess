@@ -60,6 +60,13 @@ public class ChessPiece {
         return pieceColor;
     }
 
+    public boolean isOpponent(ChessPiece otherPiece) {
+        if (otherPiece == null) {
+            return false;
+        }
+        return !this.pieceColor.equals(otherPiece.getTeamColor());
+    }
+
     /**
      * @return which type of chess piece this piece is
      */
@@ -75,6 +82,8 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+        PieceMovesCalculator calculator;
+        calculator = new BishopMovesCalculator();
+        return calculator.pieceMoves(board, myPosition);
     }
 }
