@@ -64,6 +64,6 @@ public class ChessPosition {
     }
 
     public boolean isValidPosition() {
-        return this.row >= 0 && this.row < 8 && this.col >= 0 && this.col < 8;
+        return this.row >= 1 && this.row < 9 && this.col >= 1 && this.col < 9;
     }
 }

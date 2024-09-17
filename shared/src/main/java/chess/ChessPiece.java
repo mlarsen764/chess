@@ -83,7 +83,9 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         PieceMovesCalculator calculator;
-        calculator = new BishopMovesCalculator();
+//        calculator = new BishopMovesCalculator();
+//        calculator = new RookMovesCalculator();
+        calculator = new QueenMovesCalculator();
         return calculator.pieceMoves(board, myPosition);
     }
 }
