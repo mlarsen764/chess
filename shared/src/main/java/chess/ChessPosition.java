@@ -63,7 +63,7 @@ public class ChessPosition {
         this.col = col;
     }
 
-    public boolean isValidPosition(int row, int col) {
-        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    public boolean isValidPosition() {
+        return this.row >= 0 && this.row < 8 && this.col >= 0 && this.col < 8;
     }
 }

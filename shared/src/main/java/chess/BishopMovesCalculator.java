@@ -27,7 +27,7 @@ public class BishopMovesCalculator extends PieceMovesCalculator {
 
                 ChessPosition newPosition = new ChessPosition(row, col);
 
-                if (!newPosition.isValidPosition(row, col)) {
+                if (!newPosition.isValidPosition()) {
                     break;
                 }
 
