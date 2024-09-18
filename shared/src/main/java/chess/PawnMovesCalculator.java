@@ -41,12 +41,12 @@ public class PawnMovesCalculator extends PieceMovesCalculator {
             ChessPosition capturePosition = new ChessPosition(myPosition.getRow() + direction, myPosition.getColumn() + colDirection);
             if (capturePosition.isValidPosition()) {
                 ChessPiece pieceAtCapturePosition = board.getPiece(capturePosition);
-                if (pieceAtCapturePosition != null && pieceAtCapturePosition.isOpponent(pieceAtCapturePosition)) {
+                if (pieceAtCapturePosition != null && currentPiece.isOpponent(pieceAtCapturePosition)) {
                     if(capturePosition.getRow() == promotionRow) {
-                        moves.add(new ChessMove(myPosition, oneForward, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(myPosition, oneForward, ChessPiece.PieceType.KNIGHT));
-                        moves.add(new ChessMove(myPosition, oneForward, ChessPiece.PieceType.BISHOP));
-                        moves.add(new ChessMove(myPosition, oneForward, ChessPiece.PieceType.ROOK));
+                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.QUEEN));
+                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.KNIGHT));
+                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.BISHOP));
+                        moves.add(new ChessMove(myPosition, capturePosition, ChessPiece.PieceType.ROOK));
                     } else {
                         moves.add(new ChessMove(myPosition, capturePosition, null));
                     }
