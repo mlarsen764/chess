@@ -82,10 +82,25 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        PieceMovesCalculator calculator;
-//        calculator = new BishopMovesCalculator();
-//        calculator = new RookMovesCalculator();
-        calculator = new KingMovesCalculator();
+        PieceMovesCalculator calculator = null;
+        ChessPiece myPiece = board.getPiece(myPosition);
+        if (myPiece.getPieceType() == PieceType.BISHOP) {
+            calculator = new BishopMovesCalculator();
+        } else if (myPiece.getPieceType() == PieceType.ROOK) {
+            calculator = new RookMovesCalculator();
+        } else if (myPiece.getPieceType() == PieceType.KNIGHT) {
+            calculator = new KnightMovesCalculator();
+        } else if (myPiece.getPieceType() == PieceType.QUEEN) {
+            calculator = new QueenMovesCalculator();
+        } else if (myPiece.getPieceType() == PieceType.KING) {
+            calculator = new KingMovesCalculator();
+        }
+//        else if (myPiece.getPieceType() == PieceType.PAWN) {
+//            calculator = new PawnMovesCalculator();
+//        } else {
+//            throw new IllegalArgumentException("Unknown piece type");
+//        }
+
         return calculator.pieceMoves(board, myPosition);
     }
 }
