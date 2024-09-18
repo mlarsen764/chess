@@ -94,12 +94,11 @@ public class ChessPiece {
             calculator = new QueenMovesCalculator();
         } else if (myPiece.getPieceType() == PieceType.KING) {
             calculator = new KingMovesCalculator();
+        } else if (myPiece.getPieceType() == PieceType.PAWN) {
+            calculator = new PawnMovesCalculator();
+        } else {
+            throw new IllegalArgumentException("Unknown piece type");
         }
-//        else if (myPiece.getPieceType() == PieceType.PAWN) {
-//            calculator = new PawnMovesCalculator();
-//        } else {
-//            throw new IllegalArgumentException("Unknown piece type");
-//        }
 
         return calculator.pieceMoves(board, myPosition);
     }
