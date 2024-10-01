@@ -82,6 +82,7 @@ public class ChessGame {
         for(ChessMove move : pieceMoves) {
             ChessBoard boardCopy = board.clone();
             boardCopy.addPiece(move.getEndPosition(), currentPiece);
+            boardCopy.addPiece(move.getStartPosition(), null);
             if(!isInCheck(getTeamTurn())) {
                 validMoves.add(move);
             }
@@ -100,7 +101,7 @@ public class ChessGame {
         int oldRow = move.getStartPosition().getRow();
         int oldCol = move.getStartPosition().getColumn();
         int newRow = move.getEndPosition().getRow();
-        int newCol = move.getEndPosition().getRow();
+        int newCol = move.getEndPosition().getColumn();
         board.squares[oldRow][oldCol] = null;
         board.squares[newRow][newCol] = currentPiece;
         setTeamTurn(this.teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
@@ -146,7 +147,7 @@ public class ChessGame {
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        board.resetBoard();
+        this.board = board;
     }
 
     /**
