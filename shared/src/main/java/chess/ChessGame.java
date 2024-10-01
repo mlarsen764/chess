@@ -73,10 +73,15 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece currentPiece = board.getPiece(startPosition);
+        if (currentPiece == null) {
+            return null;
+        }
         // return moves that don't leave your king in check
         Collection<ChessMove> pieceMoves = currentPiece.pieceMoves(board, startPosition);
         Collection<ChessMove> validMoves = new ArrayList<>();
         for(ChessMove move : pieceMoves) {
+            ChessBoard boardCopy = board.clone();
+            boardCopy.addPiece(move.getEndPosition(), currentPiece);
             if(!isInCheck(getTeamTurn())) {
                 validMoves.add(move);
             }
@@ -94,10 +99,11 @@ public class ChessGame {
         ChessPiece currentPiece = board.getPiece(move.getStartPosition());
         int oldRow = move.getStartPosition().getRow();
         int oldCol = move.getStartPosition().getColumn();
-        int newRow = move.getStartPosition().getRow();
-        int newCol = move.getStartPosition().getRow();
+        int newRow = move.getEndPosition().getRow();
+        int newCol = move.getEndPosition().getRow();
         board.squares[oldRow][oldCol] = null;
         board.squares[newRow][newCol] = currentPiece;
+        setTeamTurn(this.teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
     }
 
     /**

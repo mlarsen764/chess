@@ -22,6 +22,19 @@ public class ChessBoard {
     }
 
     @Override
+    public ChessBoard clone() {
+        ChessBoard clone = new ChessBoard();
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                if (squares[row][col] != null) {
+                    squares[row][col] = new ChessPiece(squares[row][col].getTeamColor(), squares[row][col].getPieceType());
+                }
+            }
+        }
+        return clone;
+    }
+
+    @Override
     public int hashCode() {
         return Arrays.deepHashCode(squares);
     }
