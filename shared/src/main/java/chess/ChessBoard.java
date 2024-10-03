@@ -27,7 +27,7 @@ public class ChessBoard {
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 if (squares[row][col] != null) {
-                    squares[row][col] = new ChessPiece(squares[row][col].getTeamColor(), squares[row][col].getPieceType());
+                    clone.squares[row][col] = new ChessPiece(squares[row][col].getTeamColor(), squares[row][col].getPieceType());
                 }
             }
         }
