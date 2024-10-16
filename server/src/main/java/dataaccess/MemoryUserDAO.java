@@ -7,12 +7,10 @@ import java.util.Map;
 
 public class MemoryUserDAO implements UserDAO {
     private Map<String, UserData> userMap = new HashMap<>();
-
     @Override
     public void clear() {
         userMap.clear();
     }
-
     @Override
     public void createUser(UserData u) throws DataAccessException {
         if (userMap.containsKey(u.username())) {
@@ -20,7 +18,6 @@ public class MemoryUserDAO implements UserDAO {
         }
         userMap.put(u.username(), u);
     }
-
     @Override
     public UserData getUser(String username) throws DataAccessException {
         UserData user = userMap.get(username);
