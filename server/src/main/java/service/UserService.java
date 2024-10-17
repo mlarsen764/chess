@@ -16,8 +16,14 @@ public class UserService {
         this.authDAO = authDAO;
     }
     public AuthData register(UserData user) throws DataAccessException {
-        if (userDAO.getUser(user.username()) != null) {
-            throw new DataAccessException("User already exists");
+        try {
+            if (userDAO.getUser(user.username()) != null) {
+                throw new DataAccessException(("User already exists"));
+            }
+        } catch (DataAccessException e) {
+            if (!e.getMessage().equals("User not found")) {
+                throw e;
+            }
         }
         userDAO.createUser(user);
 

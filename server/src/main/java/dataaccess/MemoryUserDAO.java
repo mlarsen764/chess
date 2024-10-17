@@ -22,7 +22,7 @@ public class MemoryUserDAO implements UserDAO {
     public UserData getUser(String username) throws DataAccessException {
         UserData user = userMap.get(username);
         if (user == null) {
-            throw new DataAccessException("User not found.");
+            throw new DataAccessException("User not found");
         }
         return user;
     }
