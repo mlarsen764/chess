@@ -31,7 +31,7 @@ public class UserServiceTests {
     }
 
     @Test
-    public void testClear() throws DataAccessException {
+    public void testClearSuccess() throws DataAccessException {
         userDAO.createUser(mockUser);
         userDAO.clear();
         assertThrows(DataAccessException.class, () -> userDAO.getUser("jimbo"));
