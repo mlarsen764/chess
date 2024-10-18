@@ -22,7 +22,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public GameData getGame(String gameID) throws DataAccessException {
+    public GameData getGame(int gameID) throws DataAccessException {
         GameData game = gameMap.get(gameID);
         if (game == null) {
             throw new DataAccessException("Game not found");

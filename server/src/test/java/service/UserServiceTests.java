@@ -50,7 +50,7 @@ public class UserServiceTests {
         DataAccessException thrown = assertThrows(
                 DataAccessException.class,
                 () -> userService.register(mockUser),
-                "Expected register() to say User already exists"
+                "Expected register to say User already exists"
         );
         assertEquals("User already exists", thrown.getMessage());
     }
