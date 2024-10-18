@@ -13,6 +13,7 @@ public class UserHandler {
     UserService userService;
 
     public UserHandler(UserService userService) {
+        this.userService = userService;
     }
 
     public Object registerHandler(Request request, Response response) throws DataAccessException {
@@ -26,7 +27,7 @@ public class UserHandler {
         try {
             AuthData authData = userService.register(userData);
             response.status(200);
-            return new Gson().toJson(authData);
+            return serializer.toJson(authData);
         } catch (DataAccessException e) {
             response.status(403);
             return "User already exists";
