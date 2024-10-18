@@ -23,8 +23,7 @@ public class UserHandler {
         var serializer = new Gson();
         UserData userData = serializer.fromJson(request.body(), UserData.class);
 
-        if (userData == null || userData.username() == null || userData.password() == null ||
-                userData.username().trim().isEmpty() || userData.password().trim().isEmpty()) {
+        if (userData == null || userData.username() == null || userData.password() == null) {
             response.status(400);
             return serializer.toJson(Map.of("message", "Error: bad request"));
         }
@@ -39,6 +38,50 @@ public class UserHandler {
         } catch (Exception e) {
             response.status(500);
             return serializer.toJson(Map.of("message", "Error: " + e.getMessage()));
+        }
+    }
+
+    public Object loginHandler(Request request, Response response) throws DataAccessException {
+        var serializer = new Gson();
+        UserData userData = serializer.fromJson(request.body(), UserData.class);
+
+        if (userData == null || userData.username() == null || userData.password() == null) {
+            response.status(400);
+            return serializer.toJson(Map.of("message", "Error: bad request"));
+        }
+
+        try {
+            AuthData authData = userService.login(userData);
+            response.status(200);
+            return serializer.toJson(authData);
+        } catch (DataAccessException e) {
+            response.status(401);
+            return serializer.toJson(Map.of("message", "Error: unauthorized"));
+        } catch (Exception e) {
+            response.status(500);
+            return serializer.toJson(Map.of("message", "Error: " + e.getMessage()));
+        }
+    }
+
+    public Object logoutHandler(Request request, Response response) throws DataAccessException {
+        var serializer = new Gson();
+        String authToken = request.headers("Authorization");
+
+        if (authToken == null) {
+            response.status(400);
+            return serializer.toJson(Map.of("message", "Error: missing authorization token"));
+        }
+
+        try {
+            userService.logout(authToken);
+            response.status(200);
+            return serializer.toJson(Map.of("message", "Successfully logged out"));
+        } catch (DataAccessException e) {
+            response.status(401);
+            return serializer.toJson(Map.of("message", "Error: unauthorized"));
+        } catch (Exception e) {
+            response.status(500);
+            return serializer.toJson(Map.of("message", "Error:" + e.getMessage()));
         }
     }
 }

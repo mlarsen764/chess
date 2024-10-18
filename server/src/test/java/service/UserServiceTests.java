@@ -78,14 +78,14 @@ public class UserServiceTests {
     public void testLogoutSuccess() throws DataAccessException {
         userDAO.createUser(mockUser);
         AuthData authData = userService.login(mockUser);
-        userService.logout(authData);
-        assertThrows(DataAccessException.class, () -> userService.logout(authData));
+        userService.logout(authData.authToken());
+        assertThrows(DataAccessException.class, () -> userService.logout(authData.authToken()));
     }
 
     @Test
     public void testLogoutFail() throws DataAccessException {
         AuthData invalidData = new AuthData("invalidToken", "noUser");
-        assertThrows(DataAccessException.class, () -> userService.logout(invalidData));
+        assertThrows(DataAccessException.class, () -> userService.logout(invalidData.authToken()));
     }
 
 }

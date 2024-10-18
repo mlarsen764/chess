@@ -47,8 +47,13 @@ public class UserService {
         return authData;
     }
 
-    public void logout(AuthData auth) throws DataAccessException {
-        authDAO.deleteAuth(auth.authToken());
+    public void logout(String authToken) throws DataAccessException {
+        try {
+            authDAO.getAuth(authToken);
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Authorization not found");
+        }
+        authDAO.deleteAuth(authToken);
     }
 
     public void clearUsers() throws DataAccessException {
