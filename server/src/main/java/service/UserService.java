@@ -50,4 +50,8 @@ public class UserService {
     public void logout(AuthData auth) throws DataAccessException {
         authDAO.deleteAuth(auth.authToken());
     }
+
+    public void clearUsers() throws DataAccessException {
+        userDAO.clear();
+    }
 }
