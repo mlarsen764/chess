@@ -23,14 +23,18 @@ public class GameService {
     }
 
     public Collection<GameData> listGames(String authToken) throws DataAccessException {
-        if (authDAO.getAuth(authToken) == null) {
+        try {
+            authDAO.getAuth(authToken);
+        } catch (DataAccessException e) {
             throw new DataAccessException("Unauthorized");
         }
         return gameDAO.listGames();
     }
 
     public GameData createGame(String authToken, GameData gameData) throws DataAccessException {
-        if (authDAO.getAuth(authToken) == null) {
+        try {
+            authDAO.getAuth(authToken);
+        } catch (DataAccessException e) {
             throw new DataAccessException("Unauthorized");
         }
         gameDAO.createGame(gameData);

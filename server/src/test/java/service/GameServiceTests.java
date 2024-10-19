@@ -48,9 +48,9 @@ public class GameServiceTests {
         DataAccessException thrown = assertThrows(
                 DataAccessException.class,
                 () -> gameService.listGames("invalidToken"),
-                "Expected listGames to report Authorization not found"
+                "Expected listGames to report Unauthorized"
         );
-        assertEquals("Authorization not found", thrown.getMessage());
+        assertEquals("Unauthorized", thrown.getMessage());
     }
 
     @Test
@@ -66,9 +66,9 @@ public class GameServiceTests {
         DataAccessException thrown = assertThrows(
                 DataAccessException.class,
                 () -> gameService.createGame("invalidToken", mockGame),
-                "Expected createGame() to report Authorization not found"
+                "Expected createGame() to report Unauthorized"
         );
-        assertEquals("Authorization not found", thrown.getMessage());
+        assertEquals("Unauthorized", thrown.getMessage());
     }
 
     @Test

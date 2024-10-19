@@ -45,7 +45,7 @@ public class GameHandler {
         String authToken = request.headers("Authorization");
         GameData gameData = serializer.fromJson(request.body(), GameData.class);
 
-        if (authToken == null || gameData == null) {
+        if (authToken == null || gameData == null || gameData.gameName() == null) {
             response.status(400);
             return serializer.toJson(Map.of("message", "Error: bad request"));
         }
@@ -68,23 +68,24 @@ public class GameHandler {
         String authToken = request.headers("Authorization");
         Map<String, Object> requestBody = serializer.fromJson(request.body(), Map.class);
 
-        int gameID = ((Double) requestBody.get("gameID")).intValue();
         String playerColor = (String) requestBody.get("playerColor");
-        ChessGame game = gameService.getChessGame(gameID);
 
-        if (authToken == null || playerColor == null || gameID <= 0) {
+        if (authToken == null || playerColor == null || !request.body().contains("\"gameID\":")) {
             response.status(400);
             return serializer.toJson(Map.of("message", "Error: bad request"));
         }
+
+        int gameID = ((Double) requestBody.get("gameID")).intValue();
+        ChessGame game = gameService.getChessGame(gameID);
 
         try {
             gameService.joinGame(authToken, gameID, playerColor, game);
             response.status(200);
             return "{}";
         } catch (DataAccessException e) {
-            if (e.getMessage().contains("unauthorized")) {
+            if (e.getMessage().contains("Unauthorized")) {
                 response.status(401);
-            } else if (e.getMessage().contains("already taken")) {
+            } else if (e.getMessage().contains("Already taken")) {
                 response.status(403);
             } else {
                 response.status(400);
