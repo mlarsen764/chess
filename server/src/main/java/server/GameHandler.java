@@ -9,6 +9,7 @@ import spark.Request;
 import spark.Response;
 
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameHandler {
 
@@ -44,6 +45,8 @@ public class GameHandler {
         var serializer = new Gson();
         String authToken = request.headers("Authorization");
         GameData gameData = serializer.fromJson(request.body(), GameData.class);
+        int gameID = ThreadLocalRandom.current().nextInt(1, 1000);
+        GameData createGameData = new GameData(gameID, gameData.whiteUsername(), gameData.blackUsername(), gameData.gameName(), gameData.game());
 
         if (authToken == null || gameData == null || gameData.gameName() == null) {
             response.status(400);
@@ -51,7 +54,7 @@ public class GameHandler {
         }
 
         try {
-            GameData createdGame = gameService.createGame(authToken, gameData);
+            GameData createdGame = gameService.createGame(authToken, createGameData);
             response.status(200);
             return serializer.toJson(Map.of("gameID", createdGame.gameID()));
         } catch (DataAccessException e) {

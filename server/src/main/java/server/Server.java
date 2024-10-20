@@ -54,6 +54,7 @@ public class Server {
     public Object clearHandler(Request request, Response response) throws DataAccessException {
         userDAO.clear();
         gameDAO.clear();
+        authDAO.clear();
         response.status(200);
         return "{}";
     }
