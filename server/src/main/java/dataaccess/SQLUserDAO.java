@@ -27,6 +27,7 @@ public class SQLUserDAO implements UserDAO {
             stmt.setString(1, u.username());
             stmt.setString(2, u.password());
             stmt.setString(3, u.email());
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new DataAccessException("Error creating user:" + u.username());
         }
