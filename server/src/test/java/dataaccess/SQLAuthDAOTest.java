@@ -29,8 +29,9 @@ public class SQLAuthDAOTest {
 
     @AfterEach
     void cleanUp() throws DataAccessException {
-        authDAO.clear();
-        userDAO.clear();
+        if (authDAO != null) {
+            authDAO.clear();
+        }
     }
 
     @Test

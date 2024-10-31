@@ -30,8 +30,9 @@ public class SQLGameDAOTest {
 
     @AfterEach
     void cleanUp() throws DataAccessException {
-        userDAO.clear();
-        gameDAO.clear();
+        if (gameDAO != null) {
+            gameDAO.clear();
+        }
     }
 
     @Test

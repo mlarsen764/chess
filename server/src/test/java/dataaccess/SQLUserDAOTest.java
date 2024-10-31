@@ -24,7 +24,9 @@ public class SQLUserDAOTest {
 
     @AfterEach
     void cleanUp() throws DataAccessException {
-        userDAO.clear();
+        if (userDAO != null) {
+            userDAO.clear();
+        }
     }
 
     @Test
