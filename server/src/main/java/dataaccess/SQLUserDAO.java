@@ -3,10 +3,7 @@ package dataaccess;
 import model.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class SQLUserDAO implements UserDAO {
     @Override
@@ -31,7 +28,7 @@ public class SQLUserDAO implements UserDAO {
             stmt.setString(3, u.email());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error creating user:" + u.username());
+            throw new DataAccessException("Error creating user:" + e.getMessage());
         }
     }
 

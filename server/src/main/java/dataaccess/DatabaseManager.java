@@ -46,6 +46,16 @@ public class DatabaseManager {
         }
     }
 
+    static void dropDatabase(String dbName) throws DataAccessException {
+        String sql = "DROP DATABASE IF EXISTS " + dbName;
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error dropping database: " + e.getMessage());
+        }
+    }
+
     /**
      * Creates the User table if it does not already exist.
      */
@@ -53,9 +63,8 @@ public class DatabaseManager {
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS Users (
                 username VARCHAR(50) PRIMARY KEY,
-                passwordHash VARCHAR(255) NOT NULL,
-                email VARCHAR(100) NOT NULL UNIQUE,
-                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                password VARCHAR(255) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE
             );
         """;
 
@@ -67,17 +76,43 @@ public class DatabaseManager {
         }
     }
 
+    public static void dropUserTable() throws DataAccessException {
+        String dropTableSQL = "DROP TABLE IF EXISTS Users;";
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(dropTableSQL)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error dropping Users table: " + e.getMessage());
+        }
+    }
+
+    public static void printUserTableColumns() throws DataAccessException {
+        String sql = "SELECT * FROM Users LIMIT 1"; // Using LIMIT 1 to avoid fetching too many rows
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            System.out.println("Columns in Users table:");
+            for (int i = 1; i <= columnCount; i++) {
+                System.out.printf("Column %d: %s (Type: %s)\n", i, metaData.getColumnName(i), metaData.getColumnTypeName(i));
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Error fetching columns of Users table: " + e.getMessage());
+        }
+    }
+
     /**
      * Creates the Auth table if it does not already exist.
      */
     static void createAuthTable() throws DataAccessException {
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS Auth (
-                authID INT AUTO_INCREMENT PRIMARY KEY,
                 username VARCHAR(50) NOT NULL,
-                token VARCHAR(255) NOT NULL UNIQUE,
-                expiration TIMESTAMP NOT NULL,
-                FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
+                authToken VARCHAR(255) NOT NULL UNIQUE,
+                PRIMARY KEY (authToken)
             );
         """;
 
@@ -96,7 +131,7 @@ public class DatabaseManager {
                 whiteUsername VARCHAR(50) NOT NULL,
                 blackUsername VARCHAR(50),
                 gameName VARCHAR(100),
-                gameState TEXT,
+                chess TEXT,
                 FOREIGN KEY (whiteUsername) REFERENCES Users(username),
                 FOREIGN KEY (blackUsername) REFERENCES Users(username)
             );
