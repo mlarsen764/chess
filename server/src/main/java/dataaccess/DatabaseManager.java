@@ -48,6 +48,49 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Creates the User table if it does not already exist.
+     */
+    static void createUserTable() throws DataAccessException {
+        String createTableSQL = """
+            CREATE TABLE IF NOT EXISTS Users (
+                username VARCHAR(50) PRIMARY KEY,
+                passwordHash VARCHAR(255) NOT NULL,
+                email VARCHAR(100) NOT NULL UNIQUE,
+                createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(createTableSQL)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error creating Users table: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Creates the Auth table if it does not already exist.
+     */
+    static void createAuthTable() throws DataAccessException {
+        String createTableSQL = """
+            CREATE TABLE IF NOT EXISTS Auth (
+                authID INT AUTO_INCREMENT PRIMARY KEY,
+                username VARCHAR(50) NOT NULL,
+                token VARCHAR(255) NOT NULL UNIQUE,
+                expiration TIMESTAMP NOT NULL,
+                FOREIGN KEY (username) REFERENCES Users(username) ON DELETE CASCADE
+            );
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(createTableSQL)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error creating Auth table: " + e.getMessage());
+        }
+    }
+
     static void createGameTable() throws DataAccessException {
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS Game (
