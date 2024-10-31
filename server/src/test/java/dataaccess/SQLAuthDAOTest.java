@@ -19,7 +19,7 @@ public class SQLAuthDAOTest {
 
     @BeforeEach
     void setUp() throws DataAccessException, SQLException {
-        DatabaseManager.dropDatabase("chess");
+        DatabaseManager.dropDatabase();
         DatabaseManager.initializeDatabase();
         authDAO = new SQLAuthDAO();
         userDAO = new SQLUserDAO();

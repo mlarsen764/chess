@@ -46,8 +46,8 @@ public class DatabaseManager {
         }
     }
 
-    static void dropDatabase(String dbName) throws DataAccessException {
-        String sql = "DROP DATABASE IF EXISTS " + dbName;
+    static void dropDatabase() throws DataAccessException {
+        String sql = "DROP DATABASE IF EXISTS " + DATABASE_NAME;
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();

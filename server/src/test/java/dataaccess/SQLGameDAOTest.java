@@ -19,7 +19,7 @@ public class SQLGameDAOTest {
 
     @BeforeEach
     void setUp() throws DataAccessException, SQLException {
-        DatabaseManager.dropDatabase("chess");
+        DatabaseManager.dropDatabase();
         DatabaseManager.initializeDatabase();
         userDAO = new SQLUserDAO();
         gameDAO = new SQLGameDAO();

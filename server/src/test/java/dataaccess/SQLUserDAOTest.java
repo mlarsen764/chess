@@ -16,7 +16,7 @@ public class SQLUserDAOTest {
 
     @BeforeEach
     void setUp() throws DataAccessException, SQLException {
-        DatabaseManager.dropDatabase("chess");
+        DatabaseManager.dropDatabase();
         DatabaseManager.initializeDatabase();
         userDAO = new SQLUserDAO();
         testUser = new UserData("testUser", "password123", "email@email.com");
