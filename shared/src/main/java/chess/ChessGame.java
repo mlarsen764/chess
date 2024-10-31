@@ -203,20 +203,34 @@ public class ChessGame {
             for (int col = 1; col < 9; col++) {
                 ChessPosition currentPosition = new ChessPosition(row, col);
                 ChessPiece currentPiece = board.getPiece(currentPosition);
-                if (currentPiece != null && teamColor == currentPiece.getTeamColor()) {
-                    Collection<ChessMove> moves = validMoves(currentPosition);
-                    if (moves != null && !moves.isEmpty()) {
-                        for (ChessMove move: moves) {
-                            ChessBoard boardCopy = board.clone();
-                            boardCopy.addPiece(move.getStartPosition(), null);
-                            boardCopy.addPiece(move.getEndPosition(), currentPiece);
 
-                            if (!isInCheckAfterMove(teamColor, boardCopy)) {
-                                return true;
-                            }
-                        }
+                if (isPieceValidForMove(currentPiece, teamColor)) {
+                    Collection<ChessMove> moves = validMoves(currentPosition);
+                    if (hasValidMove(moves, currentPiece, teamColor)) {
+                        return true;
                     }
                 }
+            }
+        }
+        return false;
+    }
+
+    private boolean isPieceValidForMove(ChessPiece piece, TeamColor teamColor) {
+        return piece != null && teamColor == piece.getTeamColor();
+    }
+
+    private boolean hasValidMove(Collection<ChessMove> moves, ChessPiece piece, TeamColor teamColor) {
+        if (moves == null || moves.isEmpty()) {
+            return false;
+        }
+
+        for (ChessMove move : moves) {
+            ChessBoard boardCopy = board.clone();
+            boardCopy.addPiece(move.getStartPosition(), null);
+            boardCopy.addPiece(move.getEndPosition(), piece);
+
+            if (!isInCheckAfterMove(teamColor, boardCopy)) {
+                return true;
             }
         }
         return false;
