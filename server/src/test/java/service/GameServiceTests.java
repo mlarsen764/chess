@@ -20,18 +20,28 @@ public class GameServiceTests {
 
     GameData mockGame;
     UserData mockUser;
+    UserData mockUser2;
     AuthData mockAuth;
+    AuthData mockAuth2;
 
     @BeforeEach
     public void setup() throws DataAccessException {
-        gameDAO = new MemoryGameDAO();
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+//        gameDAO = new MemoryGameDAO();
+//        userDAO = new MemoryUserDAO();
+//        authDAO = new MemoryAuthDAO();
+        gameDAO = new SQLGameDAO();
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
         gameService = new GameService(gameDAO, authDAO);
         userService = new UserService(userDAO, authDAO);
-        mockGame = new GameData(1111, null, null, "Test", new ChessGame());
         mockUser = new UserData("Matt", "test123", "test@test.test");
+        mockUser2 = new UserData("Ken", "test123", "test@test.com");
+        mockGame = new GameData(1111, null, null, "Test", new ChessGame());
+        gameDAO.clear();
+        userDAO.clear();
+        authDAO.clear();
         mockAuth = userService.register(mockUser);
+        mockAuth2 = userService.register(mockUser2);
     }
 
     @Test
@@ -87,7 +97,7 @@ public class GameServiceTests {
 
         DataAccessException thrown = assertThrows(
                 DataAccessException.class,
-                () -> gameService.joinGame(mockAuth.authToken(), mockGame.gameID(), "WHITE", mockGame.game()),
+                () -> gameService.joinGame(mockAuth2.authToken(), mockGame.gameID(), "WHITE", mockGame.game()),
                 "Expected joinGame to report Already taken"
         );
         assertEquals("Already taken", thrown.getMessage());

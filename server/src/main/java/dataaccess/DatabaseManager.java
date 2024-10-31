@@ -128,12 +128,10 @@ public class DatabaseManager {
         String createTableSQL = """
             CREATE TABLE IF NOT EXISTS Game (
                 gameID INT PRIMARY KEY,
-                whiteUsername VARCHAR(50) NOT NULL,
+                whiteUsername VARCHAR(50),
                 blackUsername VARCHAR(50),
                 gameName VARCHAR(100),
-                chess TEXT,
-                FOREIGN KEY (whiteUsername) REFERENCES Users(username),
-                FOREIGN KEY (blackUsername) REFERENCES Users(username)
+                game TEXT
             );
         """;
 

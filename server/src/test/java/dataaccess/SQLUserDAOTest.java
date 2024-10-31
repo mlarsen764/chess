@@ -24,34 +24,31 @@ public class SQLUserDAOTest {
 
 
     @Test
-    public void testCreateUser() throws DataAccessException {
-        DatabaseManager.printUserTableColumns();
+    public void testCreateUserSuccess() throws DataAccessException {
+//        DatabaseManager.printUserTableColumns();
         userDAO.createUser(testUser);
 
         UserData retrievedUser = userDAO.getUser("testUser");
         assertNotNull(retrievedUser);
         assertEquals("testUser", retrievedUser.username());
-        // Ensure that the password is hashed
         assertNotEquals("password123", retrievedUser.password());
     }
 
     @Test
-    public void testGetUserNotFound() throws DataAccessException {
-        UserData user = userDAO.getUser("falseUser");
-        assertNull(user);
+    public void testGetUserFail() throws DataAccessException {
+        assertThrows(DataAccessException.class, () -> userDAO.getUser("falseUser"));
     }
 
     @Test
-    public void testVerifyUserPositive() throws DataAccessException {
-        UserData user = new UserData("testUser", "password123", "test@example.com");
-        userDAO.createUser(user);
+    public void testVerifyUserSuccess() throws DataAccessException {
+        userDAO.createUser(testUser);
 
         boolean isVerified = userDAO.verifyUser("testUser", "password123");
         assertTrue(isVerified);
     }
 
     @Test
-    public void testVerifyUserNegative() throws DataAccessException {
+    public void testVerifyUserFail() throws DataAccessException {
         UserData user = new UserData("testUser", "password123", "test@example.com");
         userDAO.createUser(user);
 

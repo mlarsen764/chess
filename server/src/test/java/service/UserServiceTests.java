@@ -16,11 +16,15 @@ public class UserServiceTests {
     UserData mockUser;
 
     @BeforeEach
-    public void setup() {
-        userDAO = new MemoryUserDAO();
-        authDAO = new MemoryAuthDAO();
+    public void setup() throws DataAccessException {
+//        userDAO = new MemoryUserDAO();
+//        authDAO = new MemoryAuthDAO();
+        userDAO = new SQLUserDAO();
+        authDAO = new SQLAuthDAO();
         userService = new UserService(userDAO, authDAO);
         mockUser = new UserData("Matt", "test123", "test@test.test");
+        userDAO.clear();
+        authDAO.clear();
     }
 
     @Test
@@ -34,7 +38,7 @@ public class UserServiceTests {
     public void testClearSuccess() throws DataAccessException {
         userDAO.createUser(mockUser);
         userDAO.clear();
-        assertThrows(DataAccessException.class, () -> userDAO.getUser("jimbo"));
+        assertThrows(DataAccessException.class, () -> userDAO.getUser("Matt"));
     }
 
     @Test
