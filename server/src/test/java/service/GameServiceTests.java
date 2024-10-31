@@ -26,9 +26,6 @@ public class GameServiceTests {
 
     @BeforeEach
     public void setup() throws DataAccessException {
-//        gameDAO = new MemoryGameDAO();
-//        userDAO = new MemoryUserDAO();
-//        authDAO = new MemoryAuthDAO();
         gameDAO = new SQLGameDAO();
         userDAO = new SQLUserDAO();
         authDAO = new SQLAuthDAO();

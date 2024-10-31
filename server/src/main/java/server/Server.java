@@ -25,11 +25,7 @@ public class Server {
             System.exit(1);
         }
 
-//        userDAO = new MemoryUserDAO();
-//        authDAO = new MemoryAuthDAO();
-//        gameDAO = new MemoryGameDAO();
-
-          userDAO = new SQLUserDAO();
+        userDAO = new SQLUserDAO();
         authDAO = new SQLAuthDAO();
         gameDAO = new SQLGameDAO();
 

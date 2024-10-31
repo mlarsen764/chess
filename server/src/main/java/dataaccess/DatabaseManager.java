@@ -76,34 +76,6 @@ public class DatabaseManager {
         }
     }
 
-    public static void dropUserTable() throws DataAccessException {
-        String dropTableSQL = "DROP TABLE IF EXISTS Users;";
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement(dropTableSQL)) {
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataAccessException("Error dropping Users table: " + e.getMessage());
-        }
-    }
-
-    public static void printUserTableColumns() throws DataAccessException {
-        String sql = "SELECT * FROM Users LIMIT 1"; // Using LIMIT 1 to avoid fetching too many rows
-        try (Connection conn = DatabaseManager.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-
-            System.out.println("Columns in Users table:");
-            for (int i = 1; i <= columnCount; i++) {
-                System.out.printf("Column %d: %s (Type: %s)\n", i, metaData.getColumnName(i), metaData.getColumnTypeName(i));
-            }
-        } catch (SQLException e) {
-            throw new DataAccessException("Error fetching columns of Users table: " + e.getMessage());
-        }
-    }
-
     /**
      * Creates the Auth table if it does not already exist.
      */
