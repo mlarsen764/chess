@@ -18,6 +18,13 @@ public class Server {
     GameHandler gameHandler;
 
     public Server() {
+        try {
+            DatabaseManager.initializeDatabase();
+        } catch (DataAccessException e) {
+            System.err.println("Failed to initialize the database: " + e.getMessage());
+            System.exit(1);
+        }
+
         userDAO = new MemoryUserDAO();
         authDAO = new MemoryAuthDAO();
         gameDAO = new MemoryGameDAO();
