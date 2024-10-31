@@ -48,6 +48,27 @@ public class DatabaseManager {
         }
     }
 
+    static void createGameTable() throws DataAccessException {
+        String createTableSQL = """
+            CREATE TABLE IF NOT EXISTS Game (
+                gameID INT PRIMARY KEY,
+                whiteUsername VARCHAR(50) NOT NULL,
+                blackUsername VARCHAR(50),
+                gameName VARCHAR(100),
+                gameState TEXT,
+                FOREIGN KEY (whiteUsername) REFERENCES Users(username),
+                FOREIGN KEY (blackUsername) REFERENCES Users(username)
+            );
+        """;
+
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(createTableSQL)) {
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error creating Game table: " + e.getMessage());
+        }
+    }
+
     /**
      * Create a connection to the database and sets the catalog based upon the
      * properties specified in db.properties. Connections to the database should
