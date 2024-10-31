@@ -20,7 +20,7 @@ public class SQLGameDAO implements GameDAO{
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error clearing games");
+            throw new DataAccessException("Error clearing games:" + e.getMessage());
         }
     }
 
@@ -37,7 +37,7 @@ public class SQLGameDAO implements GameDAO{
             stmt.setString(5, serializedGame);
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error creating game");
+            throw new DataAccessException("Error creating game:" + e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class SQLGameDAO implements GameDAO{
                 }
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error retrieving game");
+            throw new DataAccessException("Error retrieving game:" + e.getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class SQLGameDAO implements GameDAO{
                 }
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error listing games");
+            throw new DataAccessException("Error listing games" + e.getMessage());
         }
         return games;
     }
@@ -101,7 +101,7 @@ public class SQLGameDAO implements GameDAO{
                 throw new DataAccessException("Game not found");
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error updating game");
+            throw new DataAccessException("Error updating game:" + e.getMessage());
         }
     }
 

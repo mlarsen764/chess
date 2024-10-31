@@ -15,7 +15,7 @@ public class SQLAuthDAO implements AuthDAO{
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error clearing auth data");
+            throw new DataAccessException("Error clearing auth data:" + e.getMessage());
         }
     }
 
@@ -28,7 +28,7 @@ public class SQLAuthDAO implements AuthDAO{
             stmt.setString(2, auth.username());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error creating auth");
+            throw new DataAccessException("Error creating auth:" + e.getMessage());
         }
     }
 
@@ -45,7 +45,7 @@ public class SQLAuthDAO implements AuthDAO{
                 throw new DataAccessException("Unauthorized");
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error retrieving auth data");
+            throw new DataAccessException("Error retrieving auth data:" + e.getMessage());
         }
     }
 
@@ -60,7 +60,7 @@ public class SQLAuthDAO implements AuthDAO{
                 throw new DataAccessException("Unauthorized");
             }
         } catch (SQLException e) {
-            throw new DataAccessException("Error deleting auth data");
+            throw new DataAccessException("Error deleting auth data:" + e.getMessage());
         }
     }
 }

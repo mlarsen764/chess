@@ -15,7 +15,7 @@ public class SQLUserDAO implements UserDAO {
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new DataAccessException("Error clearing users");
+            throw new DataAccessException("Error clearing users:" + e.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class SQLUserDAO implements UserDAO {
             }
             return null;
         } catch (SQLException e) {
-            throw new DataAccessException("Error retrieving user");
+            throw new DataAccessException("Error retrieving user:" + e.getMessage());
         }
     }
 }
