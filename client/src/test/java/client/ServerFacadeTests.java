@@ -153,6 +153,9 @@ public class ServerFacadeTests {
         CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), "game");
         facade.createGame(createGameRequest, loginResult);
 
+        ListGamesRequest listRequest = new ListGamesRequest(loginResult.authToken());
+        ListGamesResult listResult = facade.listGames(listRequest, loginResult);
+        Assertions.assertNotEquals(listResult.games().size(), 2);
     }
 
 }
