@@ -1,16 +1,12 @@
 package client;
 
 import com.google.gson.Gson;
-import chess.*;
 import exception.ResponseException;
-import model.*;
 import requests.*;
 import results.*;
 
 import java.io.*;
 import java.net.*;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 public class ServerFacade {
@@ -23,7 +19,6 @@ public class ServerFacade {
 
     public RegistrationResult register(RegistrationRequest request) throws ResponseException {
         String path = "/user";
-        System.out.println(this.makeRequest("POST", path, request, RegistrationResult.class, null));
         return this.makeRequest("POST", path, request, RegistrationResult.class, null);
     }
 
@@ -34,7 +29,7 @@ public class ServerFacade {
 
     public LogoutResult logout(LoginResult loginResult) throws ResponseException {
         String path = "/session";
-        return this.makeRequest("DELETE", path, loginResult, LogoutResult.class, null);
+        return this.makeRequest("DELETE", path, loginResult, LogoutResult.class, loginResult);
     }
 
     public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws ResponseException {
@@ -87,25 +82,28 @@ public class ServerFacade {
     }
 
     // Helper method to check for successful response
-    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, Exception {
+    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException {
         var status = http.getResponseCode();
         if (!isSuccessful(status)) {
-            throw new Exception();
+            if (status == 403) {
+                throw new ResponseException(status, "403 error");
+            }
+            throw new ResponseException(status, "failed: " + status);
         }
     }
 
     // Helper method to read JSON response body
     private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
-        T response = null;
-        if (http.getContentLength() > 0) {
+        int status = http.getResponseCode();
+
+        if (status == 200 && responseClass != null) {
             try (InputStream respBody = http.getInputStream()) {
-                InputStreamReader reader = new InputStreamReader(respBody);
-                if (responseClass != null) {
-                    response = new Gson().fromJson(reader, responseClass);
-                }
+                return new Gson().fromJson(new InputStreamReader(respBody), responseClass);
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage());
             }
         }
-        return response;
+        return null;
     }
 
     private boolean isSuccessful(int status) {
