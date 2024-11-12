@@ -2,13 +2,16 @@ package client;
 
 import com.google.gson.Gson;
 import chess.*;
+import exception.ResponseException;
 import model.*;
-import requests.JoinGameRequest;
+import requests.*;
+import results.*;
 
 import java.io.*;
 import java.net.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 public class ServerFacade {
 
@@ -18,74 +21,58 @@ public class ServerFacade {
         serverUrl = url;
     }
 
-    public AuthData register(UserData user) throws Exception {
-        String path = "/register";
-        return this.makeRequest(path, user, AuthData.class);
+    public RegistrationResult register(RegistrationRequest request) throws ResponseException {
+        String path = "/user";
+        System.out.println(this.makeRequest("POST", path, request, RegistrationResult.class, null));
+        return this.makeRequest("POST", path, request, RegistrationResult.class, null);
     }
 
-    public AuthData login(UserData user) throws Exception {
-        String path = "/login";
-        return this.makeRequest(path, user, AuthData.class);
+    public LoginResult login(LoginRequest request) throws ResponseException {
+        String path = "/session";
+        return this.makeRequest("POST", path, request, LoginResult.class, null);
     }
 
-    public void logout(String authToken) throws Exception {
-        String path = "/logout";
-        this.makeRequest(path, new AuthData(authToken, null), null);
+    public LogoutResult logout(LoginResult loginResult) throws ResponseException {
+        String path = "/session";
+        return this.makeRequest("DELETE", path, loginResult, LogoutResult.class, null);
     }
 
-    public GameData createGame(String authToken, GameData gameData) throws Exception {
+    public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws ResponseException {
         String path = "/game";
-        return this.makeRequestWithAuth("POST", path, authToken, gameData, GameData.class);
+        return this.makeRequest("POST", path, request, CreateGameResult.class, loginResult);
     }
 
-    public void joinGame(String authToken, int gameID, String playerColor, ChessGame chessGame) throws Exception {
-        String path = String.format("/game/%d/join", gameID);
-        var request = new JoinGameRequest(authToken, playerColor, gameID);
-        this.makeRequestWithAuth("POST", path, authToken, request, null);
+    public JoinGameResult joinGame(JoinGameRequest request, LoginResult loginResult) throws ResponseException {
+        String path = "/game";
+        return this.makeRequest("PUT", path, request, JoinGameResult.class, loginResult);
     }
 
-    public Collection<GameData> listGames(String authToken) throws Exception {
-        String path = "/games";
-        record listGamesResponse(GameData[] game) {
-        }
-        var response = this.makeRequestWithAuth("GET", path, authToken, null, listGamesResponse.class);
-        return List.of(response.game());
+    public ListGamesResult listGames(ListGamesRequest request, LoginResult loginResult) throws ResponseException {
+        String path = "/game";
+        return this.makeRequest("GET", path, request, ListGamesResult.class, loginResult);
     }
 
 
-    private <T> T makeRequest(String path, Object request, Class<T> responseClass) throws Exception {
-        try {
-            URL url = (new URI(serverUrl + path)).toURL();
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
-            http.setRequestMethod("POST");
-            http.setDoOutput(true);
-
-            writeBody(request, http);
-            http.connect();
-            throwIfNotSuccessful(http);
-            return readBody(http, responseClass);
-        } catch (Exception ex) {
-            throw new Exception();
-        }
-    }
-
-    private <T> T makeRequestWithAuth(String method, String path, String authToken, Object request, Class<T> responseClass) throws Exception {
+    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, LoginResult loginResult) throws ResponseException {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
-            http.setDoOutput(true);
 
-            if (authToken != null && !authToken.isEmpty()) {
-                http.setRequestProperty("Authorization", "Bearer " + authToken);
+            if (loginResult != null) {
+                http.addRequestProperty("authorization", loginResult.authToken());
             }
 
-            writeBody(request, http);
+            if (!Objects.equals(method, "GET")) {
+                http.setDoOutput(true);
+                writeBody(request, http);
+            }
+
             http.connect();
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
         } catch (Exception ex) {
-            throw new Exception();
+            throw new ResponseException(500, ex.getMessage());
         }
     }
 

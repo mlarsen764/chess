@@ -1,8 +1,14 @@
 package client;
 
 import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
+import exception.ResponseException;
 import org.junit.jupiter.api.*;
+import requests.*;
+import results.*;
 import server.Server;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class ServerFacadeTests {
@@ -14,7 +20,7 @@ public class ServerFacadeTests {
     @BeforeAll
     public static void init() {
         server = new Server();
-        var port = server.run(0);
+        port = server.run(0);
         System.out.println("Started test HTTP server on " + port);
     }
 
@@ -26,6 +32,8 @@ public class ServerFacadeTests {
     @BeforeEach
     void setup() throws Exception {
         server.clearDatabase();
+//        DatabaseManager.dropDatabase();
+//        DatabaseManager.initializeDatabase();
         facade = new ServerFacade("http://localhost:" + port);
     }
 
@@ -36,8 +44,14 @@ public class ServerFacadeTests {
 
 
     @Test
-    public void sampleTest() {
-        Assertions.assertTrue(true);
+    public void registerSuccess() throws ResponseException {
+        RegistrationRequest request = new RegistrationRequest("username", "password", "email");
+        try {
+            RegistrationResult result = facade.register(request);
+            Assertions.assertEquals(result.username(), request.username());
+        } catch (ResponseException e) {
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
 }
