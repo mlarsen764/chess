@@ -1,20 +1,23 @@
 package ui;
 
 import exception.ResponseException;
+import model.GameData;
 import requests.*;
 import results.*;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Scanner;
 
 public class PostLoginREPL {
 
     private static final Scanner scanner = new Scanner(System.in);
     private final ServerFacade facade;
-    PostLoginREPL postLoginREPL;
+    Collection<GameData> games;
 
     public PostLoginREPL(ServerFacade facade) {
         this.facade = facade;
-        PostLoginREPL postLoginREPL = new PostLoginREPL(facade);
+        games = new ArrayList<>();
     }
 
     public void start() {

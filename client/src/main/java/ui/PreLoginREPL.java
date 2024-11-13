@@ -18,7 +18,7 @@ public class PreLoginREPL {
     }
 
     public void start() {
-        System.out.println("Welcome to the Chess Client! Type 'help' for a list of commands.");
+        System.out.println("Welcome to Chess! Type 'help' for a list of commands.");
 
         while (true) {
             System.out.print("> ");
@@ -61,10 +61,10 @@ public class PreLoginREPL {
         try {
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
-            System.out.println("Login successful! Transitioning to post-login UI.");
+            System.out.println("Login successful!");
             postLoginREPL.start();
         } catch (ResponseException e) {
-            System.out.println("Login failed: " + e.getMessage());
+            System.out.println("Login failed: Incorrect username or password");
         }
     }
 
@@ -79,7 +79,7 @@ public class PreLoginREPL {
         try {
             RegistrationRequest registrationRequest = new RegistrationRequest(username, password, email);
             RegistrationResult registrationResult = facade.register(registrationRequest);
-            System.out.println("Registration successful! Logging in and transitioning to post-login UI.");
+            System.out.println("Registration successful! You are now logged in.");
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
             postLoginREPL.start();
