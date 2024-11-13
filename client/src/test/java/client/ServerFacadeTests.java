@@ -1,14 +1,12 @@
 package client;
 
 import dataaccess.DataAccessException;
-import dataaccess.DatabaseManager;
 import exception.ResponseException;
 import org.junit.jupiter.api.*;
 import requests.*;
 import results.*;
 import server.Server;
-
-import java.util.List;
+import ui.ServerFacade;
 
 import static org.junit.jupiter.api.Assertions.*;
 

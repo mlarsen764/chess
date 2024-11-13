@@ -1,4 +1,4 @@
-package client;
+package ui;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
