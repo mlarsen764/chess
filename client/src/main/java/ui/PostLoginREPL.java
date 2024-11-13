@@ -5,23 +5,20 @@ import model.GameData;
 import requests.*;
 import results.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Scanner;
+import java.util.*;
 
 public class PostLoginREPL {
 
     private static final Scanner scanner = new Scanner(System.in);
     private final ServerFacade facade;
-    Collection<GameData> games;
+    private final Map<Integer, String> gameIndexMap = new HashMap<>(); // Maps list numbers to game IDs
 
     public PostLoginREPL(ServerFacade facade) {
         this.facade = facade;
-        games = new ArrayList<>();
     }
 
-    public void start() {
-        System.out.println("Welcome to the Chess Client! Type 'help' for a list of commands.");
+    public void start(LoginResult loginResult) {
+        System.out.println("Now that you're logged in, type 'help' for a new list of commands.");
 
         while (true) {
             System.out.print("> ");
@@ -31,14 +28,20 @@ public class PostLoginREPL {
                 case "help":
                     displayHelp();
                     break;
-                case "quit":
-                    System.out.println("Goodbye!");
-                    return;
-                case "login":
-                    handleLogin();
+                case "logout":
+                    handleLogout(loginResult);
+                    return; // Exits to PreLoginREPL
+                case "create game":
+                    handleCreateGame(loginResult);
                     break;
-                case "register":
-                    handleRegister();
+                case "list games":
+                    handleListGames(loginResult);
+                    break;
+                case "play game":
+                    handleJoinGame(loginResult);
+                    break;
+                case "observe game":
+                    handleObserveGame();
                     break;
                 default:
                     System.out.println("Unknown command. Type 'help' for available commands.");
@@ -49,47 +52,99 @@ public class PostLoginREPL {
 
     private void displayHelp() {
         System.out.println("Available commands:");
-        System.out.println("  help      - Displays this help message.");
-        System.out.println("  quit      - Exits the program.");
-        System.out.println("  login     - Log in to an existing account.");
-        System.out.println("  register  - Create a new account and log in.");
+        System.out.println("  help           - Displays this help message.");
+        System.out.println("  logout         - Log out of the current session.");
+        System.out.println("  create game    - Create a new chess game.");
+        System.out.println("  list games     - List all available games.");
+        System.out.println("  play game      - Join a game as a player.");
+        System.out.println("  observe game   - Observe a game as a spectator.");
     }
 
-    private void handleLogin() {
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-
+    private void handleLogout(LoginResult loginResult) {
         try {
-            LoginRequest loginRequest = new LoginRequest(username, password);
-            LoginResult loginResult = facade.login(loginRequest);
-            System.out.println("Login successful! Transitioning to post-login UI.");
-            // Transition to post-login UI
-//            postLoginUI(loginResult);
+            facade.logout(loginResult);
+            System.out.println("You have been logged out.");
         } catch (ResponseException e) {
-            System.out.println("Login failed: " + e.getMessage());
+            System.out.println("Logout failed: " + e.getMessage());
         }
     }
 
-    private void handleRegister() {
-        System.out.print("Enter username: ");
-        String username = scanner.nextLine();
-        System.out.print("Enter password: ");
-        String password = scanner.nextLine();
-        System.out.print("Enter email: ");
-        String email = scanner.nextLine();
+    private void handleCreateGame(LoginResult loginResult) {
+        System.out.print("Enter a name for the new game: ");
+        String gameName = scanner.nextLine();
 
         try {
-            RegistrationRequest registrationRequest = new RegistrationRequest(username, password, email);
-            RegistrationResult registrationResult = facade.register(registrationRequest);
-            System.out.println("Registration successful! Logging in and transitioning to post-login UI.");
-            LoginRequest loginRequest = new LoginRequest(username, password);
-            LoginResult loginResult = facade.login(loginRequest);
-            // Transition to post-login UI
-//            postLoginREPL.start();
+            CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), gameName);
+            facade.createGame(createGameRequest, loginResult);
+            System.out.println("Game '" + gameName + "' created successfully!");
         } catch (ResponseException e) {
-            System.out.println("Registration failed: " + e.getMessage());
+            System.out.println("Failed to create game: " + e.getMessage());
         }
     }
-}
+
+    private void handleListGames(LoginResult loginResult) {
+        try {
+            ListGamesResult listGamesResult = facade.listGames(new ListGamesRequest(loginResult.authToken()), loginResult);
+            Collection<GameData> games = listGamesResult.games();
+
+            System.out.println("Available games:");
+            gameIndexMap.clear();
+
+            int index = 1;
+            for (GameData game : games) {
+                System.out.println(index + ". " + game.getName() + " - Players: " + game.getPlayers());
+                gameIndexMap.put(index, game.gameID()); // Map index to game ID for future selection
+                index++;
+            }
+        } catch (ResponseException e) {
+            System.out.println("Failed to list games: " + e.getMessage());
+        }
+    }
+
+    private void handleJoinGame(LoginResult loginResult) {
+        if (gameIndexMap.isEmpty()) {
+            System.out.println("No games available. Use 'list games' to see available games.");
+            return;
+        }
+
+        System.out.print("Enter the number of the game you want to join: ");
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+
+        if (!gameIndexMap.containsKey(gameNumber)) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+
+        System.out.print("Enter color (WHITE/BLACK): ");
+        String color = scanner.nextLine().toUpperCase();
+
+        try {
+            String gameId = gameIndexMap.get(gameNumber);
+            JoinGameRequest joinRequest = new JoinGameRequest(loginResult.authToken(), color, gameId);
+            facade.joinGame(joinRequest, loginResult);
+            System.out.println("Joined game as " + color + "!");
+//            displayBoard();
+        } catch (ResponseException e) {
+            System.out.println("Failed to join game: " + e.getMessage());
+        }
+    }
+
+    private void handleObserveGame() {
+        if (gameIndexMap.isEmpty()) {
+            System.out.println("No games available. Use 'list games' to see available games.");
+            return;
+        }
+
+        System.out.print("Enter the number of the game you want to observe: ");
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+
+        if (!gameIndexMap.containsKey(gameNumber)) {
+            System.out.println("Invalid game number.");
+            return;
+        }
+
+        String gameId = gameIndexMap.get(gameNumber);
+        System.out.println("Observing game: " + gameId);
+//        displayBoard();
+    }
+    }

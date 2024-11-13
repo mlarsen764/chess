@@ -62,7 +62,7 @@ public class PreLoginREPL {
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
             System.out.println("Login successful!");
-            postLoginREPL.start();
+            postLoginREPL.start(loginResult);
         } catch (ResponseException e) {
             System.out.println("Login failed: Incorrect username or password");
         }
@@ -82,7 +82,7 @@ public class PreLoginREPL {
             System.out.println("Registration successful! You are now logged in.");
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
-            postLoginREPL.start();
+            postLoginREPL.start(loginResult);
         } catch (ResponseException e) {
             System.out.println("Registration failed: " + e.getMessage());
         }
