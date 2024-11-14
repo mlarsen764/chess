@@ -22,7 +22,7 @@ public class SQLGameDAO implements GameDAO{
 
     @Override
     public void createGame(GameData g) throws DataAccessException {
-        String sql = "INSERT INTO Game (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ? ,? ,? ,?)";
+        String sql = "INSERT INTO Game (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
         String serializedGame = serializeGame(g.game());
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

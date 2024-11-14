@@ -1,6 +1,7 @@
 package ui;
 
 import com.google.gson.Gson;
+import model.GameData;
 import requests.*;
 import results.*;
 
@@ -31,9 +32,9 @@ public class ServerFacade {
         this.makeRequest("DELETE", path, loginResult, LogoutResult.class, loginResult);
     }
 
-    public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws Exception {
+    public GameData createGame(GameData game, LoginResult loginResult) throws Exception {
         String path = "/game";
-        return this.makeRequest("POST", path, request, CreateGameResult.class, loginResult);
+        return this.makeRequest("POST", path, game, GameData.class, loginResult);
     }
 
     public JoinGameResult joinGame(JoinGameRequest request, LoginResult loginResult) throws Exception {

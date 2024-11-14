@@ -1,6 +1,8 @@
 package client;
 
+import chess.ChessGame;
 import dataaccess.DataAccessException;
+import model.GameData;
 import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
@@ -92,8 +94,7 @@ public class ServerFacadeTests {
         LoginRequest loginRequest = new LoginRequest("user", "pass");
         LoginResult loginResult = facade.login(loginRequest);
 
-        CreateGameRequest createGameRequest = new CreateGameRequest("token", "game");
-        CreateGameResult createGameResult = facade.createGame(createGameRequest, loginResult);
+        GameData createGameResult = facade.createGame(new GameData(0, null, null, "game", null), loginResult);
         assertNotNull(createGameResult);
         assertTrue(createGameResult.gameID() > 0);
     }
@@ -101,7 +102,7 @@ public class ServerFacadeTests {
     @Test
     public void createGameFail() throws Exception {
         CreateGameRequest badRequest = new CreateGameRequest("fake", "nope");
-        assertThrows(Exception.class, () -> facade.createGame(badRequest, null));
+        assertThrows(Exception.class, () -> facade.createGame(new GameData(0, null, null, "game", null), null));
     }
 
     @Test
@@ -113,7 +114,7 @@ public class ServerFacadeTests {
         LoginResult loginResult = facade.login(loginRequest);
 
         CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), "game");
-        CreateGameResult createGameResult = facade.createGame(createGameRequest, loginResult);
+        GameData createGameResult = facade.createGame(new GameData(0, null, null, "game", null), loginResult);
         JoinGameRequest joinRequest = new JoinGameRequest(loginResult.authToken(), "WHITE", createGameResult.gameID());
         JoinGameResult joinResult = facade.joinGame(joinRequest, loginResult);
         assertNotNull(joinResult);
@@ -133,11 +134,9 @@ public class ServerFacadeTests {
         LoginRequest loginRequest = new LoginRequest("user", "pass");
         LoginResult loginResult = facade.login(loginRequest);
 
-        CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), "game");
-        facade.createGame(createGameRequest, loginResult);
+        facade.createGame(new GameData(0, null, null, "game", null), loginResult);
 
-        CreateGameRequest gameRequest2 = new CreateGameRequest(loginResult.authToken(), "game2");
-        facade.createGame(gameRequest2, loginResult);
+        facade.createGame(new GameData(0, null, null, "game2", null), loginResult);
 
         ListGamesRequest listRequest = new ListGamesRequest(loginResult.authToken());
         ListGamesResult listResult = facade.listGames(listRequest, loginResult);
@@ -152,8 +151,7 @@ public class ServerFacadeTests {
         LoginRequest loginRequest = new LoginRequest("user", "pass");
         LoginResult loginResult = facade.login(loginRequest);
 
-        CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), "game");
-        facade.createGame(createGameRequest, loginResult);
+        facade.createGame(new GameData(0, null, null, "game", null), loginResult);
 
         ListGamesRequest listRequest = new ListGamesRequest(loginResult.authToken());
         ListGamesResult listResult = facade.listGames(listRequest, loginResult);
