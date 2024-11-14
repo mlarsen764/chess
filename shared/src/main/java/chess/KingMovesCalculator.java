@@ -8,7 +8,7 @@ public class KingMovesCalculator extends PieceMovesCalculator {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>();
-        int[][] directions = {
+        int[][] kingDirections = {
                 {1, 0},
                 {-1, 0},
                 {0, 1},
@@ -21,7 +21,7 @@ public class KingMovesCalculator extends PieceMovesCalculator {
 
         ChessPiece currentPiece = board.getPiece(myPosition);
 
-        for (int[] direction : directions) {
+        for (int[] direction : kingDirections) {
             int row = myPosition.getRow();
             int col = myPosition.getColumn();
 
