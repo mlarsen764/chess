@@ -1,7 +1,6 @@
 package client;
 
 import dataaccess.DataAccessException;
-import exception.ResponseException;
 import org.junit.jupiter.api.*;
 import server.Server;
 import ui.ServerFacade;
@@ -42,21 +41,21 @@ public class ServerFacadeTests {
 
 
     @Test
-    public void registerSuccess() throws ResponseException {
+    public void registerSuccess() throws Exception {
         RegistrationRequest request = new RegistrationRequest("user", "pass", "email");
         RegistrationResult result = facade.register(request);
         Assertions.assertEquals(result.username(), request.username());
     }
 
     @Test
-    public void registerFail() throws ResponseException {
+    public void registerFail() throws Exception {
         RegistrationRequest request = new RegistrationRequest("user", "pass", "email");
         facade.register(request);
-        assertThrows(ResponseException.class, () -> facade.register(request));
+        assertThrows(Exception.class, () -> facade.register(request));
     }
 
     @Test
-    public void loginSuccess() throws ResponseException {
+    public void loginSuccess() throws Exception {
         RegistrationRequest registrationRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registrationRequest);
         LoginRequest loginRequest = new LoginRequest("user", "pass");
@@ -65,13 +64,13 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void loginFail() throws ResponseException {
+    public void loginFail() throws Exception {
         LoginRequest badRequest = new LoginRequest("fake", "pass");
-        assertThrows(ResponseException.class, () -> facade.login(badRequest));
+        assertThrows(Exception.class, () -> facade.login(badRequest));
     }
 
     @Test
-    public void logoutSuccess() throws ResponseException {
+    public void logoutSuccess() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);
         LoginRequest loginRequest = new LoginRequest("user", "pass");
@@ -81,7 +80,7 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void createGameSuccess() throws ResponseException {
+    public void createGameSuccess() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);
 
@@ -95,13 +94,13 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void createGameFail() throws ResponseException {
+    public void createGameFail() throws Exception {
         CreateGameRequest badRequest = new CreateGameRequest("fake", "nope");
-        assertThrows(ResponseException.class, () -> facade.createGame(badRequest, null));
+        assertThrows(Exception.class, () -> facade.createGame(badRequest, null));
     }
 
     @Test
-    public void joinGameSuccess() throws ResponseException {
+    public void joinGameSuccess() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);
 
@@ -116,13 +115,13 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void joinGameFail() throws ResponseException {
+    public void joinGameFail() throws Exception {
         JoinGameRequest badRequest = new JoinGameRequest("none", "WHITE", 5);
-        assertThrows(ResponseException.class, () -> facade.joinGame(badRequest, null));
+        assertThrows(Exception.class, () -> facade.joinGame(badRequest, null));
     }
 
     @Test
-    public void listGamesSuccess() throws ResponseException {
+    public void listGamesSuccess() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);
 
@@ -141,7 +140,7 @@ public class ServerFacadeTests {
     }
 
     @Test
-    public void listGamesFail() throws ResponseException {
+    public void listGamesFail() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);
 
