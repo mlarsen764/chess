@@ -27,9 +27,9 @@ public class ServerFacade {
         return this.makeRequest("POST", path, request, LoginResult.class, null);
     }
 
-    public LogoutResult logout(LoginResult loginResult) throws ResponseException {
+    public void logout(LoginResult loginResult) throws ResponseException {
         String path = "/session";
-        return this.makeRequest("DELETE", path, loginResult, LogoutResult.class, loginResult);
+        this.makeRequest("DELETE", path, loginResult, LogoutResult.class, loginResult);
     }
 
     public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws ResponseException {
