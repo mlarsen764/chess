@@ -176,12 +176,12 @@ public class ChessGame {
 
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col ++) {
-                ChessPosition currentPosition = new ChessPosition(row, col);
-                ChessPiece currentPiece = boardCopy.getPiece(currentPosition);
+                ChessPosition thisPosition = new ChessPosition(row, col);
+                ChessPiece currentPiece = boardCopy.getPiece(thisPosition);
                 if (currentPiece == null || currentPiece.getTeamColor() == teamColor) {
                     continue;
                 }
-                for (ChessMove opponentMove : currentPiece.pieceMoves(boardCopy, currentPosition)) {
+                for (ChessMove opponentMove : currentPiece.pieceMoves(boardCopy, thisPosition)) {
                     if (opponentMove.getEndPosition().equals(kingPosition)) {
                         return true;
                     }

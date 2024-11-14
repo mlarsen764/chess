@@ -7,8 +7,7 @@ import requests.*;
 import java.util.*;
 
 public class PostLoginREPL {
-    // TODO: add numbers and letters to board that's printed, also fix issue where games have to be listed before you can join
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
     private final ServerFacade facade;
     private final Map<Integer, Integer> gameIndexMap = new HashMap<>();
     private int gameCounter = 1;
@@ -24,7 +23,7 @@ public class PostLoginREPL {
 
         while (true) {
             System.out.print("Post-Login> ");
-            String command = scanner.nextLine().trim().toLowerCase();
+            String command = SCANNER.nextLine().trim().toLowerCase();
 
             switch (command) {
                 case "help":
@@ -73,7 +72,7 @@ public class PostLoginREPL {
 
     private void handleCreateGame(LoginResult loginResult) {
         System.out.print("Enter a name for the new game: ");
-        String gameName = scanner.nextLine();
+        String gameName = SCANNER.nextLine();
 
         try {
             CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), gameName);
@@ -129,7 +128,7 @@ public class PostLoginREPL {
         System.out.print("Enter the number of the game you want to join: ");
         int gameNumber;
         try {
-            gameNumber = Integer.parseInt(scanner.nextLine());
+            gameNumber = Integer.parseInt(SCANNER.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Please enter a valid game number.");
             return;
@@ -141,7 +140,7 @@ public class PostLoginREPL {
         }
 
         System.out.print("Enter color (WHITE/BLACK): ");
-        String color = scanner.nextLine().toUpperCase();
+        String color = SCANNER.nextLine().toUpperCase();
 
         if (!color.equals("WHITE") && !color.equals("BLACK")) {
             System.out.println("Invalid color. Please enter either 'WHITE' or 'BLACK'.");
@@ -172,7 +171,7 @@ public class PostLoginREPL {
         System.out.print("Enter the number of the game you want to observe: ");
         int gameNumber;
         try {
-            gameNumber = Integer.parseInt(scanner.nextLine());
+            gameNumber = Integer.parseInt(SCANNER.nextLine());
         } catch (NumberFormatException e) {
             System.out.println("Invalid input. Use 'list' to see valid game numbers.");
             return;

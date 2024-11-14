@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class PreLoginREPL {
 
-    private static final Scanner scanner = new Scanner(System.in);
+    private static final Scanner SCANNER = new Scanner(System.in);
     private final ServerFacade facade;
     PostLoginREPL postLoginREPL;
 
@@ -21,7 +21,7 @@ public class PreLoginREPL {
 
         while (true) {
             System.out.print("Pre-Login> ");
-            String command = scanner.nextLine().trim().toLowerCase();
+            String command = SCANNER.nextLine().trim().toLowerCase();
 
             switch (command) {
                 case "help":
@@ -53,9 +53,9 @@ public class PreLoginREPL {
 
     private void handleLogin() {
         System.out.print("Enter username: ");
-        String username = scanner.nextLine();
+        String username = SCANNER.nextLine();
         System.out.print("Enter password: ");
-        String password = scanner.nextLine();
+        String password = SCANNER.nextLine();
 
         try {
             LoginRequest loginRequest = new LoginRequest(username, password);
@@ -69,11 +69,11 @@ public class PreLoginREPL {
 
     private void handleRegister() {
         System.out.print("Enter username: ");
-        String username = scanner.nextLine();
+        String username = SCANNER.nextLine();
         System.out.print("Enter password: ");
-        String password = scanner.nextLine();
+        String password = SCANNER.nextLine();
         System.out.print("Enter email: ");
-        String email = scanner.nextLine();
+        String email = SCANNER.nextLine();
 
         try {
             RegistrationRequest registrationRequest = new RegistrationRequest(username, password, email);
