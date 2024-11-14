@@ -8,13 +8,16 @@ import results.*;
 import java.util.*;
 
 public class PostLoginREPL {
-
+    // TODO: add numbers and letters to board that's printed, also fix issue where games have to be listed before you can join
     private static final Scanner scanner = new Scanner(System.in);
     private final ServerFacade facade;
     private final Map<Integer, Integer> gameIndexMap = new HashMap<>();
+    private int gameCounter = 1;
+    BoardBuilder boardBuilder;
 
     public PostLoginREPL(ServerFacade facade) {
         this.facade = facade;
+        this.boardBuilder = new BoardBuilder();
     }
 
     public void start(LoginResult loginResult) {
@@ -88,16 +91,31 @@ public class PostLoginREPL {
             Collection<GameData> games = listGamesResult.games();
 
             System.out.println("Available games:");
-            gameIndexMap.clear();
 
-            int index = 1;
             for (GameData game : games) {
-                String whitePlayer = game.whiteUsername() != null ? game.whiteUsername() : "open";
-                String blackPlayer = game.blackUsername() != null ? game.blackUsername() : "open";
-                System.out.println("Game Number:" + index + " | " + game.gameName() + " | White Player: " + whitePlayer + " | Black Player: " + blackPlayer);
-                gameIndexMap.put(index, game.gameID());
-                index++;
+                if (!gameIndexMap.containsValue(game.gameID())) {
+                    gameIndexMap.put(gameCounter, game.gameID());
+                    gameCounter++;
+                }
             }
+            gameIndexMap.entrySet().stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEachOrdered(entry -> {
+                        int gameNumber = entry.getKey();
+                        int gameId = entry.getValue();
+
+                        GameData game = games.stream()
+                                .filter(g -> g.gameID() == gameId)
+                                .findFirst()
+                                .orElse(null);
+
+                        if (game != null) {
+                            String whitePlayer = game.whiteUsername() != null ? game.whiteUsername() : "open";
+                            String blackPlayer = game.blackUsername() != null ? game.blackUsername() : "open";
+                            System.out.println("Game Number: " + gameNumber + " | " + game.gameName() +
+                                    " | White Player: " + whitePlayer + " | Black Player: " + blackPlayer);
+                        }
+                    });
         } catch (ResponseException e) {
             System.out.println("Failed to list games: " + e.getMessage());
         }
@@ -105,7 +123,7 @@ public class PostLoginREPL {
 
     private void handleJoinGame(LoginResult loginResult) {
         if (gameIndexMap.isEmpty()) {
-            System.out.println("No games available. Use 'list games' to see available games.");
+            System.out.println("No games available. Use create to make a new game!");
             return;
         }
 
@@ -119,7 +137,7 @@ public class PostLoginREPL {
         }
 
         if (!gameIndexMap.containsKey(gameNumber)) {
-            System.out.println("Invalid game number. Use the command 'list games' to see valid game numbers");
+            System.out.println("Invalid game number. Use 'list' to see valid game numbers");
             return;
         }
 
@@ -137,7 +155,9 @@ public class PostLoginREPL {
             JoinGameRequest joinRequest = new JoinGameRequest(loginResult.authToken(), color, gameId);
             facade.joinGame(joinRequest, loginResult);
             System.out.println("Joined game as " + color + "!");
-//            displayBoard();
+            boardBuilder.setupNewGame();
+            boardBuilder.renderBoardWhite();
+            boardBuilder.renderBoardBlack();
         } catch (ResponseException e) {
             System.out.println("Failed to join game: Color already taken");
             handleJoinGame(loginResult);
@@ -155,7 +175,7 @@ public class PostLoginREPL {
         try {
             gameNumber = Integer.parseInt(scanner.nextLine());
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a valid game number.");
+            System.out.println("Invalid input. Use 'list' to see valid game numbers.");
             return;
         }
 
@@ -166,6 +186,8 @@ public class PostLoginREPL {
 
         int gameId = gameIndexMap.get(gameNumber);
         System.out.println("Observing game: " + gameId);
-//        displayBoard();
+        boardBuilder.setupNewGame();
+        boardBuilder.renderBoardWhite();
+        boardBuilder.renderBoardBlack();
     }
-    }
+}
