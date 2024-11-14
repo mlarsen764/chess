@@ -14,14 +14,14 @@ public class PreLoginREPL {
 
     public PreLoginREPL(ServerFacade facade) {
         this.facade = facade;
-        PostLoginREPL postLoginREPL = new PostLoginREPL(facade);
+        this.postLoginREPL = new PostLoginREPL(facade);
     }
 
     public void start() {
         System.out.println("Welcome to Chess! Type 'help' for a list of commands.");
 
         while (true) {
-            System.out.print("> ");
+            System.out.print("Pre-Login> ");
             String command = scanner.nextLine().trim().toLowerCase();
 
             switch (command) {
