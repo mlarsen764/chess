@@ -1,7 +1,6 @@
 package ui;
 
 import com.google.gson.Gson;
-import exception.ResponseException;
 import requests.*;
 import results.*;
 
@@ -17,38 +16,38 @@ public class ServerFacade {
         serverUrl = url;
     }
 
-    public RegistrationResult register(RegistrationRequest request) throws ResponseException {
+    public RegistrationResult register(RegistrationRequest request) throws Exception {
         String path = "/user";
         return this.makeRequest("POST", path, request, RegistrationResult.class, null);
     }
 
-    public LoginResult login(LoginRequest request) throws ResponseException {
+    public LoginResult login(LoginRequest request) throws Exception {
         String path = "/session";
         return this.makeRequest("POST", path, request, LoginResult.class, null);
     }
 
-    public void logout(LoginResult loginResult) throws ResponseException {
+    public void logout(LoginResult loginResult) throws Exception {
         String path = "/session";
         this.makeRequest("DELETE", path, loginResult, LogoutResult.class, loginResult);
     }
 
-    public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws ResponseException {
+    public CreateGameResult createGame(CreateGameRequest request, LoginResult loginResult) throws Exception {
         String path = "/game";
         return this.makeRequest("POST", path, request, CreateGameResult.class, loginResult);
     }
 
-    public JoinGameResult joinGame(JoinGameRequest request, LoginResult loginResult) throws ResponseException {
+    public JoinGameResult joinGame(JoinGameRequest request, LoginResult loginResult) throws Exception {
         String path = "/game";
         return this.makeRequest("PUT", path, request, JoinGameResult.class, loginResult);
     }
 
-    public ListGamesResult listGames(ListGamesRequest request, LoginResult loginResult) throws ResponseException {
+    public ListGamesResult listGames(ListGamesRequest request, LoginResult loginResult) throws Exception {
         String path = "/game";
         return this.makeRequest("GET", path, request, ListGamesResult.class, loginResult);
     }
 
 
-    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, LoginResult loginResult) throws ResponseException {
+    private <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, LoginResult loginResult) throws Exception {
         try {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
@@ -67,7 +66,7 @@ public class ServerFacade {
             throwIfNotSuccessful(http);
             return readBody(http, responseClass);
         } catch (Exception ex) {
-            throw new ResponseException(500, ex.getMessage());
+            throw new Exception(ex.getMessage());
         }
     }
 
@@ -82,13 +81,13 @@ public class ServerFacade {
     }
 
     // Helper method to check for successful response
-    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, ResponseException {
+    private void throwIfNotSuccessful(HttpURLConnection http) throws IOException, Exception {
         var status = http.getResponseCode();
         if (!isSuccessful(status)) {
             if (status == 403) {
-                throw new ResponseException(status, "403 error");
+                throw new Exception("403 error");
             }
-            throw new ResponseException(status, "failed: " + status);
+            throw new Exception("Operation Failed");
         }
     }
 

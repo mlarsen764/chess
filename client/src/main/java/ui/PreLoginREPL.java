@@ -1,6 +1,5 @@
 package ui;
 
-import exception.ResponseException;
 import requests.*;
 import results.*;
 
@@ -63,7 +62,7 @@ public class PreLoginREPL {
             LoginResult loginResult = facade.login(loginRequest);
             System.out.println("Login successful!");
             postLoginREPL.start(loginResult);
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Login failed: Incorrect username or password");
         }
     }
@@ -83,7 +82,7 @@ public class PreLoginREPL {
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
             postLoginREPL.start(loginResult);
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Registration failed: " + e.getMessage());
         }
     }

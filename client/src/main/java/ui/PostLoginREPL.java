@@ -1,6 +1,5 @@
 package ui;
 
-import exception.ResponseException;
 import model.GameData;
 import results.*;
 import requests.*;
@@ -67,7 +66,7 @@ public class PostLoginREPL {
         try {
             facade.logout(loginResult);
             System.out.println("You have been logged out.");
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Logout failed: " + e.getMessage());
         }
     }
@@ -80,7 +79,7 @@ public class PostLoginREPL {
             CreateGameRequest createGameRequest = new CreateGameRequest(loginResult.authToken(), gameName);
             facade.createGame(createGameRequest, loginResult);
             System.out.println("Game '" + gameName + "' created successfully!");
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Failed to create game: " + e.getMessage());
         }
     }
@@ -116,7 +115,7 @@ public class PostLoginREPL {
                                     " | White Player: " + whitePlayer + " | Black Player: " + blackPlayer);
                         }
                     });
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Failed to list games: " + e.getMessage());
         }
     }
@@ -158,7 +157,7 @@ public class PostLoginREPL {
             boardBuilder.setupNewGame();
             boardBuilder.renderBoardWhite();
             boardBuilder.renderBoardBlack();
-        } catch (ResponseException e) {
+        } catch (Exception e) {
             System.out.println("Failed to join game: Color already taken");
             handleJoinGame(loginResult);
         }
