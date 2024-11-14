@@ -1,6 +1,8 @@
 package ui;
 
 import exception.ResponseException;
+import requests.*;
+import results.*;
 
 import java.util.Scanner;
 
@@ -76,7 +78,7 @@ public class PreLoginREPL {
 
         try {
             RegistrationRequest registrationRequest = new RegistrationRequest(username, password, email);
-            RegistrationResult registrationResult = facade.register(registrationRequest);
+            facade.register(registrationRequest);
             System.out.println("Registration successful! You are now logged in.");
             LoginRequest loginRequest = new LoginRequest(username, password);
             LoginResult loginResult = facade.login(loginRequest);
