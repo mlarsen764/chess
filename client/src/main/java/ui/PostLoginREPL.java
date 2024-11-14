@@ -2,8 +2,6 @@ package ui;
 
 import exception.ResponseException;
 import model.GameData;
-import requests.*;
-import results.*;
 
 import java.util.*;
 

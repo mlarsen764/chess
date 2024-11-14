@@ -1,8 +1,6 @@
 package ui;
 
 import exception.ResponseException;
-import requests.*;
-import results.*;
 
 import java.util.Scanner;
 

@@ -2,8 +2,6 @@ package ui;
 
 import com.google.gson.Gson;
 import exception.ResponseException;
-import requests.*;
-import results.*;
 
 import java.io.*;
 import java.net.*;
