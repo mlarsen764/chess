@@ -80,6 +80,11 @@ public class ServerFacadeTests {
     }
 
     @Test
+    public void logoutFail() throws Exception {
+        assertThrows(Exception.class, () -> facade.logout(null));
+    }
+
+    @Test
     public void createGameSuccess() throws Exception {
         RegistrationRequest registerRequest = new RegistrationRequest("user", "pass", "email");
         facade.register(registerRequest);

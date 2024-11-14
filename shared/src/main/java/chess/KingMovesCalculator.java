@@ -28,19 +28,19 @@ public class KingMovesCalculator extends PieceMovesCalculator {
             row += direction[0];
             col += direction[1];
 
-            ChessPosition newPosition = new ChessPosition(row, col);
+            ChessPosition newKingPosition = new ChessPosition(row, col);
 
-            if (!newPosition.isValidPosition()) {
+            if (!newKingPosition.isValidPosition()) {
                 continue;
             }
 
-            ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+            ChessPiece pieceAtNewPosition = board.getPiece(newKingPosition);
 
             if (pieceAtNewPosition == null) {
-                moves.add(new ChessMove(myPosition, newPosition, null));
+                moves.add(new ChessMove(myPosition, newKingPosition, null));
             } else {
                 if (currentPiece.isOpponent(pieceAtNewPosition)) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    moves.add(new ChessMove(myPosition, newKingPosition, null));
                 }
             }
         }

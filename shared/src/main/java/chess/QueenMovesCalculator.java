@@ -29,19 +29,19 @@ public class QueenMovesCalculator extends PieceMovesCalculator {
                 row += direction[0];
                 col += direction[1];
 
-                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPosition newQueenPosition = new ChessPosition(row, col);
 
-                if (!newPosition.isValidPosition()) {
+                if (!newQueenPosition.isValidPosition()) {
                     break;
                 }
 
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                ChessPiece pieceAtNewPosition = board.getPiece(newQueenPosition);
 
                 if (pieceAtNewPosition == null) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    moves.add(new ChessMove(myPosition, newQueenPosition, null));
                 } else {
                     if (currentPiece.isOpponent(pieceAtNewPosition)) {
-                        moves.add(new ChessMove(myPosition, newPosition, null));
+                        moves.add(new ChessMove(myPosition, newQueenPosition, null));
                     }
                     break;
                 }

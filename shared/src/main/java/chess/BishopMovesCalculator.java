@@ -25,19 +25,19 @@ public class BishopMovesCalculator extends PieceMovesCalculator {
                 row += direction[0];
                 col += direction[1];
 
-                ChessPosition newPosition = new ChessPosition(row, col);
+                ChessPosition newBishopPosition = new ChessPosition(row, col);
 
-                if (!newPosition.isValidPosition()) {
+                if (!newBishopPosition.isValidPosition()) {
                     break;
                 }
 
-                ChessPiece pieceAtNewPosition = board.getPiece(newPosition);
+                ChessPiece pieceAtNewPosition = board.getPiece(newBishopPosition);
 
                 if (pieceAtNewPosition == null) {
-                    moves.add(new ChessMove(myPosition, newPosition, null));
+                    moves.add(new ChessMove(myPosition, newBishopPosition, null));
                 } else {
                     if (currentPiece.isOpponent(pieceAtNewPosition)) {
-                        moves.add(new ChessMove(myPosition, newPosition, null));
+                        moves.add(new ChessMove(myPosition, newBishopPosition, null));
                     }
                     break;
                 }
