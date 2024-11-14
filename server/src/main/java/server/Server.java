@@ -42,7 +42,6 @@ public class Server {
         Spark.staticFiles.location("web");
 
         // Register your endpoints and handle exceptions here.
-//        Spark.post("/user", (request, response) -> userHandler.registerHandler(request, response));
         Spark.delete("/db", this::clearHandler);
         Spark.post("/user", userHandler::registerHandler);
         Spark.post("/session", userHandler::loginHandler);
@@ -51,17 +50,18 @@ public class Server {
         Spark.post("/game", gameHandler::createGameHandler);
         Spark.put("/game", gameHandler::joinGameHandler);
 
-        //This line initializes the server and can be removed once you have a functioning endpoint 
-//        Spark.init();
-
         Spark.awaitInitialization();
         return Spark.port();
     }
 
-    public Object clearHandler(Request request, Response response) throws DataAccessException {
+    public void clearDatabase() throws DataAccessException {
         userDAO.clear();
         gameDAO.clear();
         authDAO.clear();
+    }
+
+    public Object clearHandler(Request request, Response response) throws DataAccessException {
+        clearDatabase();
         response.status(200);
         return "{}";
     }

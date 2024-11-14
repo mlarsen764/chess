@@ -35,7 +35,6 @@ public class UserService {
     }
 
     public AuthData login(UserData user) throws DataAccessException {
-        UserData existingUser = userDAO.getUser(user.username());
         if (!userDAO.verifyUser(user.username(), user.password())) {
             throw new DataAccessException("Invalid username or password");
         }
