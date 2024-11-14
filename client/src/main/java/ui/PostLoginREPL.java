@@ -113,7 +113,7 @@ public class PostLoginREPL {
 
     private void handleJoinGame(LoginResult loginResult) {
         if (games.isEmpty()) {
-            System.out.println("No games available yet, use list to list games first!");
+            System.out.println("No games available yet, use 'list' to list games first!");
             return;
         }
 
@@ -122,7 +122,7 @@ public class PostLoginREPL {
         try {
             gameNumber = Integer.parseInt(SCANNER.nextLine()) - 1;
         } catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please enter a valid game number.");
+            System.out.println("Invalid input. 'list' to see valid game numbers.");
             return;
         }
 
@@ -153,7 +153,7 @@ public class PostLoginREPL {
 
     private void handleObserveGame() throws Exception {
         if (games.isEmpty()) {
-            System.out.println("No games available.");
+            System.out.println("No games found. Use 'list' to show available games");
             return;
         }
 
@@ -167,11 +167,10 @@ public class PostLoginREPL {
         }
 
         if (gameNumber < 0 || gameNumber >= games.size()) {
-            System.out.println("Invalid game number.");
+            System.out.println("Invalid game number. 'list' to see valid game numbers.");
             return;
         }
 
-        System.out.println("Observing game: " + games.get(gameNumber).gameID());
         printBoard();
     }
 
